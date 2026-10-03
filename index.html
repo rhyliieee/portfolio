@@ -1,0 +1,659 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="color-scheme" content="light only">
+<title>Jomar Talambayan, systems and automation</title>
+<meta name="description" content="Jomar Talambayan builds automations, workflows and SOPs so clinic teams can spend their day on clients instead of admin.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,300..800&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#F3F5F3;
+  --surface:#FFFFFF;
+  --ink:#23272B;
+  --ink-2:#545B62;
+  --ink-3:#7F878D;
+  --line:#D4D9D5;
+  --green:#1E5B43;
+  --green-soft:#DCEAE2;
+  --hl:#E6F46B;
+  --hl-soft:#F2F8C6;
+  --amber:#7A4F0E;
+  --amber-soft:#F5EAD2;
+  --font:"Bricolage Grotesque", ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  box-sizing:border-box;
+  padding-top:env(safe-area-inset-top,0px);
+  padding-bottom:env(safe-area-inset-bottom,0px);
+  color-scheme:light;
+}
+*,*::before,*::after{box-sizing:inherit}
+html{background:var(--bg);scroll-behavior:smooth;scroll-padding-top:calc(env(safe-area-inset-top,0px) + 84px)}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--font);font-optical-sizing:auto;font-size:17.5px;line-height:1.6;-webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility}
+img,svg{max-width:100%}
+a{color:var(--green);text-underline-offset:3px;text-decoration-thickness:1px}
+a:hover{text-decoration-thickness:2px}
+:focus-visible{outline:2.5px solid var(--green);outline-offset:3px;border-radius:4px}
+p{margin:0 0 1em}
+h1,h2,h3{margin:0;font-weight:700;letter-spacing:-0.02em}
+
+.wrap{max-width:1180px;margin:0 auto;padding:0 28px}
+
+/* nav */
+.nav{position:sticky;top:env(safe-area-inset-top,0px);z-index:40;background:rgba(243,245,243,.86);-webkit-backdrop-filter:blur(12px);backdrop-filter:blur(12px);border-bottom:1px solid transparent;transition:border-color .25s}
+.nav.scrolled{border-bottom-color:var(--line)}
+.nav-inner{display:flex;align-items:center;justify-content:space-between;height:68px;gap:20px}
+.brand{font-weight:700;font-size:17px;letter-spacing:-0.01em;color:var(--ink);text-decoration:none}
+.nav-links{display:flex;align-items:center;gap:26px}
+.nav-links a{color:var(--ink-2);text-decoration:none;font-size:15.5px}
+.nav-links a:hover{color:var(--ink)}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;font:600 15.5px/1 var(--font);padding:13px 20px;border-radius:999px;text-decoration:none;border:1.5px solid var(--ink);transition:background .2s,color .2s,transform .2s}
+.btn-ink{background:var(--ink);color:#fff}
+.btn-ink:hover{background:var(--green);border-color:var(--green)}
+.btn-line{background:transparent;color:var(--ink)}
+.btn-line:hover{background:var(--surface)}
+.nav .btn{padding:10px 16px;font-size:14.5px}
+
+/* hero */
+.hero{display:grid;grid-template-columns:minmax(0,7fr) minmax(0,5fr);gap:56px;align-items:center;padding:72px 0 88px}
+.headline{font-size:clamp(44px,6.2vw,90px);line-height:1.02;font-weight:740;letter-spacing:-0.04em;margin:0 0 34px}
+.headline .ln{display:block}
+.hl{background-image:linear-gradient(transparent 56%,var(--hl) 56%,var(--hl) 90%,transparent 90%);background-repeat:no-repeat;background-size:0% 100%;-webkit-box-decoration-break:clone;box-decoration-break:clone;animation:mark .55s cubic-bezier(.6,.1,.3,1) forwards;animation-delay:var(--d,0s)}
+@keyframes mark{to{background-size:100% 100%}}
+.lede{font-size:clamp(18px,1.6vw,21px);line-height:1.55;color:var(--ink-2);max-width:36em;margin-bottom:30px}
+.lede strong{color:var(--ink);font-weight:600}
+.cta-row{display:flex;flex-wrap:wrap;gap:12px}
+.facts{display:grid;grid-template-columns:repeat(3,1fr);gap:24px;margin-top:52px;padding-top:22px;border-top:1px solid var(--line);font-size:15px;color:var(--ink-2);line-height:1.45}
+.facts strong{display:block;color:var(--ink);font-weight:650;font-size:16px;margin-bottom:2px}
+
+.hero-fig{margin:0;background:var(--surface);border:1px solid var(--line);border-radius:22px;padding:22px 18px 16px}
+.hero-fig svg{display:block;width:100%;height:auto}
+.hero-fig figcaption{font-size:13.5px;color:var(--ink-3);padding:10px 8px 0;line-height:1.45}
+.n-title{font:650 17px var(--font);fill:#23272B}
+.n-sub{font:400 13.5px var(--font);fill:#545B62}
+.n-time{font:500 12.5px var(--font);fill:#7F878D}
+.wire-draw{stroke-dasharray:1;stroke-dashoffset:1;animation:draw 2.6s .3s cubic-bezier(.5,0,.3,1) forwards}
+@keyframes draw{to{stroke-dashoffset:0}}
+.wire-dash{stroke-dasharray:3 7;opacity:0;animation:fadeIn .6s 3.4s forwards,dash 1.1s 3.4s linear infinite}
+@keyframes fadeIn{to{opacity:1}}
+@keyframes dash{to{stroke-dashoffset:-20}}
+
+/* page with spine */
+.page{position:relative}
+.spine{display:none}
+section{padding:96px 0}
+.sec-head{display:grid;grid-template-columns:minmax(0,5fr) minmax(0,6fr);gap:56px;align-items:end;margin-bottom:56px}
+.sec-head h2{position:relative;font-size:clamp(34px,4.2vw,56px);line-height:1.04;letter-spacing:-0.035em}
+.sec-head p{color:var(--ink-2);max-width:34em;margin:0}
+
+/* cases */
+.case{display:grid;grid-template-columns:minmax(0,7fr) minmax(0,4fr);gap:56px;padding:44px 0;border-top:1px solid var(--line)}
+.case h3{font-size:clamp(25px,2.5vw,32px);line-height:1.15;letter-spacing:-0.025em;margin-bottom:14px;max-width:22em}
+.case .lead{font-size:18.5px;color:var(--ink);max-width:34em}
+.case .detail{color:var(--ink-2);font-size:16px;max-width:36em}
+.case .detail b{color:var(--ink);font-weight:650}
+.case-aside{align-self:start}
+.platform{display:inline-block;font-size:13.5px;font-weight:600;color:var(--green);background:var(--green-soft);padding:5px 12px;border-radius:999px;margin-bottom:16px}
+.mini{list-style:none;margin:0;padding:0}
+.mini li{position:relative;background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:11px 14px;font-size:15px;font-weight:550;margin-bottom:22px}
+.mini li:not(:last-child)::after{content:"";position:absolute;left:50%;bottom:-23px;width:1.5px;height:22px;background:var(--ink-3)}
+.mini li:last-child{margin-bottom:0;background:var(--hl-soft);border-color:#C9D35A}
+.case.small{grid-template-columns:minmax(0,1fr)}
+.case.small .detail{max-width:46em;font-size:17px}
+
+/* fit table */
+.fit{background:var(--surface);border:1px solid var(--line);border-radius:18px;overflow:hidden}
+.fit-row{display:grid;grid-template-columns:minmax(0,5fr) minmax(0,7fr) 210px;gap:28px;padding:18px 26px;border-top:1px solid var(--line);align-items:center;font-size:16px}
+.fit-row:first-child{border-top:0}
+.fit-head{background:#F7F8F6;font-size:14px;color:var(--ink-3);font-weight:600;padding-top:14px;padding-bottom:14px}
+.fit-row .req{font-weight:620;color:var(--ink)}
+.fit-row .ev{color:var(--ink-2)}
+.badge{justify-self:start;display:inline-flex;align-items:center;gap:8px;font-size:13.5px;font-weight:600;padding:6px 12px;border-radius:999px;white-space:nowrap}
+.badge::before{content:"";width:7px;height:7px;border-radius:50%;background:currentColor}
+.b-direct{background:var(--green-soft);color:var(--green)}
+.b-pattern{background:var(--amber-soft);color:var(--amber)}
+.fit-note{display:grid;grid-template-columns:auto 1fr;gap:16px;align-items:start;margin-top:22px;max-width:52em;color:var(--ink-2);font-size:16px}
+.fit-note .tag{font-weight:650;color:var(--ink);background:var(--hl);padding:2px 10px;border-radius:6px;font-size:14.5px;white-space:nowrap}
+
+/* plan */
+.plan{display:grid;grid-template-columns:minmax(0,4fr) minmax(0,7fr);gap:64px}
+.plan-intro{position:sticky;top:120px;align-self:start}
+.plan-intro h2{font-size:clamp(34px,4.2vw,56px);line-height:1.04;letter-spacing:-0.035em;margin-bottom:18px;position:relative}
+.plan-intro p{color:var(--ink-2)}
+.concept{display:inline-block;font-size:14px;font-weight:600;color:var(--amber);background:var(--amber-soft);padding:6px 12px;border-radius:8px;margin-bottom:6px}
+.phases{position:relative;list-style:none;margin:0;padding:0 0 0 72px;--p:0}
+.phases::before,.phases::after{content:"";position:absolute;left:21px;top:22px;bottom:30px;width:2px;background:var(--line)}
+.phases::after{background:var(--ink);transform-origin:top;transform:scaleY(var(--p))}
+.phase{position:relative;padding-bottom:44px}
+.phase:last-child{padding-bottom:0}
+.pnum{position:absolute;left:-72px;top:0;width:44px;height:44px;border-radius:50%;border:1.5px solid var(--ink);background:var(--bg);display:grid;place-items:center;font-weight:700;font-size:17px;transition:background .35s,border-color .35s}
+.phase.lit .pnum{background:var(--hl);border-color:var(--ink)}
+.phase h3{font-size:26px;line-height:1.2;letter-spacing:-0.02em;margin:6px 0 10px}
+.phase p{color:var(--ink-2);font-size:16.5px;max-width:34em}
+.phase .out{font-size:15px;color:var(--ink);margin:0}
+.phase .out b{font-weight:650}
+.plan-close{margin-top:44px;padding:20px 24px;border-radius:14px;background:var(--surface);border:1px solid var(--line);font-size:16.5px;color:var(--ink-2)}
+
+/* SOP */
+.sop-grid{display:grid;grid-template-columns:minmax(0,5fr) minmax(0,6fr);gap:64px;align-items:start}
+.sop-grid h2{font-size:clamp(34px,4.2vw,56px);line-height:1.04;letter-spacing:-0.035em;margin-bottom:18px;position:relative}
+.sop-grid .intro p{color:var(--ink-2);max-width:30em}
+.sop{background:var(--surface);border:1.5px solid var(--ink);border-radius:16px;padding:30px 32px;font-size:15.5px;line-height:1.55;box-shadow:10px 10px 0 var(--green-soft)}
+.sop-top{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:6px}
+.sop-top .kind{font-size:13.5px;color:var(--ink-3);font-weight:600}
+.sop-top .ver{font-size:13.5px;color:var(--ink-3)}
+.sop h3{font-size:25px;letter-spacing:-0.02em;margin-bottom:18px}
+.sop dl{display:grid;grid-template-columns:96px 1fr;gap:8px 18px;margin:0 0 20px;padding:16px 0;border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
+.sop dt{font-weight:650;color:var(--ink)}
+.sop dd{margin:0;color:var(--ink-2)}
+.sop h4{font-size:15.5px;font-weight:700;margin:0 0 8px}
+.sop ol{margin:0 0 20px;padding-left:20px;color:var(--ink-2)}
+.sop ol li{margin-bottom:5px;padding-left:4px}
+.checks{list-style:none;margin:0 0 14px;padding:0}
+.check{display:flex;gap:12px;align-items:flex-start;width:100%;text-align:left;background:none;border:0;padding:7px 6px;margin:0 -6px;border-radius:8px;font:inherit;color:var(--ink-2);cursor:pointer;transition:background .2s}
+.check:hover{background:#F5F7F4}
+.box{flex:none;position:relative;width:20px;height:20px;margin-top:1px;border:1.5px solid var(--ink);border-radius:5px;background:var(--surface);transition:background .2s}
+.box::after{content:"";position:absolute;left:5.5px;top:1.5px;width:6px;height:11px;border:solid var(--ink);border-width:0 2.2px 2.2px 0;transform:rotate(45deg) scale(0);transition:transform .22s cubic-bezier(.3,1.6,.5,1)}
+.check[aria-checked="true"]{color:var(--ink)}
+.check[aria-checked="true"] .box{background:var(--hl)}
+.check[aria-checked="true"] .box::after{transform:rotate(45deg) scale(1)}
+.golive{display:flex;align-items:center;gap:10px;font-weight:650;font-size:15px;padding:12px 14px;border-radius:10px;background:#F5F7F4;color:var(--ink-2);transition:background .3s,color .3s;margin-bottom:18px}
+.golive .lamp{width:10px;height:10px;border-radius:50%;background:var(--ink-3);transition:background .3s,box-shadow .3s}
+.golive.ready{background:var(--green-soft);color:var(--green)}
+.golive.ready .lamp{background:var(--green);box-shadow:0 0 0 5px rgba(30,91,67,.15)}
+.rollback{font-size:14.5px;color:var(--ink-2);margin:0}
+.rollback b{color:var(--ink)}
+
+/* principles */
+.principles{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:40px 64px}
+.principle h3{font-size:24px;letter-spacing:-0.02em;margin-bottom:8px}
+.principle p{color:var(--ink-2);font-size:16.5px;max-width:30em;margin:0}
+
+/* toolkit */
+.tools{border-top:1px solid var(--line)}
+.tool-row{display:grid;grid-template-columns:minmax(0,4fr) minmax(0,8fr);gap:28px;padding:18px 0;border-bottom:1px solid var(--line);font-size:16.5px}
+.tool-row dt{font-weight:650}
+.tool-row dd{margin:0;color:var(--ink-2)}
+
+/* contact */
+.contact{padding:110px 0 120px}
+.contact h2{font-size:clamp(40px,6vw,84px);line-height:1.02;letter-spacing:-0.04em;max-width:13em;margin-bottom:22px}
+.contact .sub{font-size:19px;color:var(--ink-2);max-width:32em;margin-bottom:38px}
+.mail{display:inline-block;font-size:clamp(22px,3.2vw,40px);font-weight:650;letter-spacing:-0.025em;color:var(--ink);text-decoration:none;background-image:linear-gradient(transparent 60%,var(--hl) 60%,var(--hl) 92%,transparent 92%);background-repeat:no-repeat;background-size:100% 100%;padding:0 4px;word-break:break-word;transition:background-size .3s}
+.mail:hover{background-size:100% 100%;color:var(--green)}
+.contact-meta{display:flex;flex-wrap:wrap;gap:14px 32px;margin-top:34px;font-size:16px;color:var(--ink-2)}
+.contact-meta a{font-weight:600}
+footer{border-top:1px solid var(--line);padding:26px 0 34px;font-size:14px;color:var(--ink-3)}
+footer .wrap{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap}
+
+/* desktop spine: one line runs through the page like a workflow */
+@media (min-width:1180px){
+  .page{padding-left:76px}
+  .spine{display:block;position:absolute;left:28px;top:110px;bottom:120px;width:2px;background:var(--line)}
+  .spine .runner{position:absolute;left:-7px;top:0;width:16px;height:16px;border-radius:50%;background:var(--hl);border:2px solid var(--ink);transform:translateY(calc(var(--s,0) * 1px));will-change:transform}
+  .marker::before{content:"";position:absolute;left:-58px;top:.38em;width:14px;height:14px;border-radius:50%;border:2px solid var(--ink);background:var(--bg);transition:background .3s}
+  .marker.reached::before{background:var(--ink)}
+}
+
+@media (max-width:980px){
+  .hero{grid-template-columns:1fr;gap:44px;padding:44px 0 64px}
+  .hero-fig{max-width:520px}
+  .sec-head,.plan,.sop-grid{grid-template-columns:1fr;gap:20px}
+  .plan-intro{position:static}
+  .case{grid-template-columns:1fr;gap:26px}
+  .mini{display:flex;flex-wrap:wrap;gap:10px 22px}
+  .mini li{margin:0}
+  .mini li:not(:last-child)::after{left:auto;right:-23px;bottom:auto;top:50%;width:22px;height:1.5px}
+  .fit-row{grid-template-columns:1fr;gap:8px;padding:18px 20px}
+  .fit-head{display:none}
+  .badge{margin-top:4px}
+  .principles{grid-template-columns:1fr;gap:30px}
+  .tool-row{grid-template-columns:1fr;gap:4px}
+  section{padding:72px 0}
+}
+@media (max-width:640px){
+  body{font-size:16.5px}
+  .wrap{padding:0 20px}
+  .nav-links a:not(.btn){display:none}
+  .facts{grid-template-columns:1fr;gap:16px}
+  .sop{padding:22px 20px;box-shadow:6px 6px 0 var(--green-soft)}
+  .sop dl{grid-template-columns:1fr;gap:2px 0}
+  .sop dd{margin-bottom:8px}
+  .phases{padding-left:60px}
+  .pnum{left:-60px;width:40px;height:40px}
+  .phases::before,.phases::after{left:19px}
+  .fit-note{grid-template-columns:1fr;gap:8px}
+}
+@media (prefers-reduced-motion:reduce){
+  *,*::before,*::after{animation-duration:.001ms!important;animation-delay:0s!important;animation-iteration-count:1!important;transition-duration:.001ms!important}
+  html{scroll-behavior:auto}
+  .wire-dash{opacity:1}
+}
+</style>
+</head>
+<body>
+
+<nav class="nav" aria-label="Main">
+  <div class="wrap nav-inner">
+    <a class="brand" href="#top">Jomar Talambayan</a>
+    <div class="nav-links">
+      <a href="#work">Work</a>
+      <a href="#fit">Fit</a>
+      <a href="#plan">Plan</a>
+      <a href="#sop">SOPs</a>
+      <a class="btn btn-ink" href="mailto:jomartalambayan97@gmail.com?subject=Systems%20%26%20Automation%20VA">Email me</a>
+    </div>
+  </div>
+</nav>
+
+<header class="wrap hero" id="top">
+  <div>
+    <h1 class="headline">
+      <span class="ln"><span class="hl" style="--d:.5s">Enquiry in.</span></span>
+      <span class="ln"><span class="hl" style="--d:1.3s">Reply sent.</span></span>
+      <span class="ln"><span class="hl" style="--d:2.1s">Consult booked.</span></span>
+      <span class="ln"><span class="hl" style="--d:2.9s">Nobody had to chase it.</span></span>
+    </h1>
+    <p class="lede">I'm <strong>Jomar Talambayan</strong>, a software and platform engineer who builds automations, workflows and the SOPs that keep them running, so clinic teams can spend their day on clients instead of admin.</p>
+    <div class="cta-row">
+      <a class="btn btn-ink" href="mailto:jomartalambayan97@gmail.com?subject=Systems%20%26%20Automation%20VA">Email me</a>
+      <a class="btn btn-line" href="#work">See what I've built</a>
+    </div>
+    <div class="facts">
+      <div><strong>Automation</strong>Lark, n8n, APIs and webhooks, running in production</div>
+      <div><strong>Testing</strong>Every workflow tested before it reaches a real person</div>
+      <div><strong>Documentation</strong>SOPs and runbooks so the knowledge stays with the team</div>
+    </div>
+  </div>
+
+  <figure class="hero-fig">
+    <svg id="heroFlow" viewBox="0 0 360 440" role="img" aria-labelledby="flowTitle flowDesc">
+      <title id="flowTitle">A clinic enquiry workflow</title>
+      <desc id="flowDesc">Four connected steps: new enquiry, instant reply, booking made, follow-up sent. A pulse travels through them on a loop.</desc>
+      <path d="M180 20 V420" fill="none" stroke="#D4D9D5" stroke-width="2" pathLength="1" class="wire-draw"/>
+      <path d="M180 20 V420" fill="none" stroke="#7F878D" stroke-width="1.5" class="wire-dash"/>
+
+      <g opacity="0">
+        <set attributeName="opacity" to="1" begin="3.6s" fill="freeze"/>
+        <circle r="10" fill="#E6F46B"/>
+        <circle r="4.5" fill="#23272B"/>
+        <animateMotion dur="4s" begin="3.6s" repeatCount="indefinite" path="M180 20 V420"/>
+      </g>
+
+      <g>
+        <rect x="30" y="20" width="300" height="70" rx="14" fill="#FFFFFF" stroke="#23272B" stroke-width="1.25">
+          <animate attributeName="fill" begin="0.5s" dur="0.4s" values="#FFFFFF;#E6F46B" fill="freeze"/>
+          <animate attributeName="fill" begin="3.6s" dur="4s" repeatCount="indefinite" keyTimes="0;0.06;0.0875;0.2;1" values="#FFFFFF;#FFFFFF;#E6F46B;#FFFFFF;#FFFFFF"/>
+        </rect>
+        <text x="50" y="50" class="n-title">New enquiry</text>
+        <text x="50" y="71" class="n-sub">Website, SMS or social</text>
+        <text x="312" y="50" class="n-time" text-anchor="end">0 sec</text>
+      </g>
+      <g>
+        <rect x="30" y="130" width="300" height="70" rx="14" fill="#FFFFFF" stroke="#23272B" stroke-width="1.25">
+          <animate attributeName="fill" begin="1.3s" dur="0.4s" values="#FFFFFF;#E6F46B" fill="freeze"/>
+          <animate attributeName="fill" begin="3.6s" dur="4s" repeatCount="indefinite" keyTimes="0;0.33;0.3625;0.48;1" values="#FFFFFF;#FFFFFF;#E6F46B;#FFFFFF;#FFFFFF"/>
+        </rect>
+        <text x="50" y="160" class="n-title">Instant reply</text>
+        <text x="50" y="181" class="n-sub">On-brand, with a booking link</text>
+        <text x="312" y="160" class="n-time" text-anchor="end">4 sec</text>
+      </g>
+      <g>
+        <rect x="30" y="240" width="300" height="70" rx="14" fill="#FFFFFF" stroke="#23272B" stroke-width="1.25">
+          <animate attributeName="fill" begin="2.1s" dur="0.4s" values="#FFFFFF;#E6F46B" fill="freeze"/>
+          <animate attributeName="fill" begin="3.6s" dur="4s" repeatCount="indefinite" keyTimes="0;0.6;0.6375;0.75;1" values="#FFFFFF;#FFFFFF;#E6F46B;#FFFFFF;#FFFFFF"/>
+        </rect>
+        <text x="50" y="270" class="n-title">Consult booked</text>
+        <text x="50" y="291" class="n-sub">Intake forms sent digitally</text>
+        <text x="312" y="270" class="n-time" text-anchor="end">Same day</text>
+      </g>
+      <g>
+        <rect x="30" y="350" width="300" height="70" rx="14" fill="#FFFFFF" stroke="#23272B" stroke-width="1.25">
+          <animate attributeName="fill" begin="2.9s" dur="0.4s" values="#FFFFFF;#E6F46B" fill="freeze"/>
+          <animate attributeName="fill" begin="3.6s" dur="4s" repeatCount="indefinite" keyTimes="0;0.88;0.9125;0.985;1" values="#FFFFFF;#FFFFFF;#E6F46B;#FFFFFF;#FFFFFF"/>
+        </rect>
+        <text x="50" y="380" class="n-title">Follow-up sent</text>
+        <text x="50" y="401" class="n-sub">Aftercare and nurture emails</text>
+        <text x="312" y="380" class="n-time" text-anchor="end">Next day</text>
+      </g>
+    </svg>
+    <figcaption>How a clinic enquiry should move: illustrated as a concept, not taken from client work.</figcaption>
+  </figure>
+</header>
+
+<main class="wrap page" id="page">
+  <div class="spine" aria-hidden="true"><span class="runner"></span></div>
+
+  <section id="work" aria-labelledby="work-title">
+    <div class="sec-head">
+      <h2 id="work-title" class="marker">Systems I've built</h2>
+      <p>Three automations from my current work in Philippine HRIS and payroll, where a missed message or a wrong number ends up on someone's payslip. Each one uses a pattern a clinic runs on every day.</p>
+    </div>
+
+    <article class="case">
+      <div>
+        <h3>HRIS issue alerts that reach the right people</h3>
+        <p class="lead">When an issue is raised for our HRIS, an automation sends a structured Lark message to the responsible team straight away: what happened, where, and who reported it.</p>
+        <p class="detail"><b>Why it was needed.</b> An issue only gets fixed once the right person knows about it. Relying on someone to notice and forward it is how things slip.</p>
+        <p class="detail"><b>Where it fits a clinic.</b> This is the shape of a good enquiry workflow in Podium: a message comes in, it's routed to an owner, and nothing sits unseen in an inbox.</p>
+      </div>
+      <aside class="case-aside" aria-label="Workflow steps">
+        <span class="platform">Built in Lark</span>
+        <ol class="mini">
+          <li>Issue raised</li>
+          <li>Details captured</li>
+          <li>Lark message sent</li>
+          <li>Team picks it up</li>
+        </ol>
+      </aside>
+    </article>
+
+    <article class="case">
+      <div>
+        <h3>Requirements specs that draft themselves</h3>
+        <p class="lead">A Lark automation generates the first draft of a System Requirements Specification from structured inputs, so every spec starts complete and in the same format.</p>
+        <p class="detail"><b>Why it was needed.</b> Writing specs from a blank page is slow, and every author structures them differently. A generated draft makes the important sections impossible to forget.</p>
+        <p class="detail"><b>Where it fits a clinic.</b> The same idea powers reusable email templates, consult forms and SOPs: consistency is built in once instead of remembered every time.</p>
+      </div>
+      <aside class="case-aside" aria-label="Workflow steps">
+        <span class="platform">Built in Lark</span>
+        <ol class="mini">
+          <li>Request logged</li>
+          <li>Inputs structured</li>
+          <li>Spec drafted</li>
+          <li>Ready for review</li>
+        </ol>
+      </aside>
+    </article>
+
+    <article class="case">
+      <div>
+        <h3>Release items deployed to QA without waiting on a person</h3>
+        <p class="lead">An n8n workflow deploys release items to our QA environment during each release cycle, so testers get what they need on time.</p>
+        <p class="detail"><b>Why it was needed.</b> Manual deployments in a busy release are slow and easy to get wrong, and every delay eats into the time left for testing.</p>
+        <p class="detail"><b>Where it fits a clinic.</b> Nothing should reach a real client untested. I build changes somewhere safe, test them, and only then switch them on.</p>
+      </div>
+      <aside class="case-aside" aria-label="Workflow steps">
+        <span class="platform">Built in n8n</span>
+        <ol class="mini">
+          <li>Item ready for QA</li>
+          <li>n8n workflow runs</li>
+          <li>Deployed to QA</li>
+          <li>Testing starts</li>
+        </ol>
+      </aside>
+    </article>
+
+    <article class="case small">
+      <div>
+        <h3>Behind all three: testing as a habit</h3>
+        <p class="detail">I set up automated tests, regression checks and quality gates in GitHub Actions, and I write runbooks for how systems are deployed and operated. That habit carries to any platform: try to break a workflow before a client does, and write down how it works before anyone needs to ask.</p>
+      </div>
+    </article>
+  </section>
+
+  <section id="fit" aria-labelledby="fit-title">
+    <div class="sec-head">
+      <h2 id="fit-title" class="marker">How my experience maps to your list</h2>
+      <p>Your job post, line by line. Where I've done it directly, I say so. Where I've built the same pattern on a different platform, I say that too.</p>
+    </div>
+
+    <div class="fit" role="table" aria-label="Role requirements mapped to experience">
+      <div class="fit-row fit-head" role="row">
+        <span role="columnheader">You need</span>
+        <span role="columnheader">What I've done</span>
+        <span role="columnheader">Match</span>
+      </div>
+      <div class="fit-row" role="row">
+        <span class="req" role="cell">Build and improve automations and workflows</span>
+        <span class="ev" role="cell">Lark automations, n8n workflows, and API and webhook integrations used in production</span>
+        <span class="badge b-direct" role="cell">Direct experience</span>
+      </div>
+      <div class="fit-row" role="row">
+        <span class="req" role="cell">Podium autoresponders and enquiry workflows</span>
+        <span class="ev" role="cell">Event-triggered Lark messages that route each issue to the right owner</span>
+        <span class="badge b-pattern" role="cell">Same pattern, new tool</span>
+      </div>
+      <div class="fit-row" role="row">
+        <span class="req" role="cell">Mailchimp campaigns, automations and funnels</span>
+        <span class="ev" role="cell">Multi-step triggered workflows with conditions and timing in n8n and Lark</span>
+        <span class="badge b-pattern" role="cell">Same pattern, new tool</span>
+      </div>
+      <div class="fit-row" role="row">
+        <span class="req" role="cell">Membership setup in Simple Salon</span>
+        <span class="ev" role="cell">Odoo HRIS and payroll: complex business rules, recurring cycles, and records that have to be right</span>
+        <span class="badge b-pattern" role="cell">Same pattern, new tool</span>
+      </div>
+      <div class="fit-row" role="row">
+        <span class="req" role="cell">Digitise forms and client history</span>
+        <span class="ev" role="cell">Structured-input automations and Odoo data models that keep records consistent</span>
+        <span class="badge b-pattern" role="cell">Same pattern, new tool</span>
+      </div>
+      <div class="fit-row" role="row">
+        <span class="req" role="cell">Clear SOPs for new systems</span>
+        <span class="ev" role="cell">SOPs, operational runbooks and architecture decision records</span>
+        <span class="badge b-direct" role="cell">Direct experience</span>
+      </div>
+      <div class="fit-row" role="row">
+        <span class="req" role="cell">Test systems thoroughly before go-live</span>
+        <span class="ev" role="cell">Automated testing, regression analysis, QA deployments and quality gates</span>
+        <span class="badge b-direct" role="cell">Direct experience</span>
+      </div>
+      <div class="fit-row" role="row">
+        <span class="req" role="cell">Research and implement improvements</span>
+        <span class="ev" role="cell">Evaluating and introducing tooling across automation, CI/CD and infrastructure</span>
+        <span class="badge b-direct" role="cell">Direct experience</span>
+      </div>
+    </div>
+    <div class="fit-note">
+      <span class="tag">Straight answer</span>
+      <p style="margin:0">Where a line says same pattern, I haven't used that exact platform in production yet. Triggers, conditions, delays, routing and testing work the same way everywhere, and I learn a new platform by building in a sandbox and testing, not by guessing.</p>
+    </div>
+  </section>
+
+  <section id="plan" aria-labelledby="plan-title">
+    <div class="plan">
+      <div class="plan-intro">
+        <h2 id="plan-title" class="marker">What I'd do first at your clinic</h2>
+        <span class="concept">A proposed plan, not past client work</span>
+        <p style="margin-top:14px">Written for this application, from the responsibilities in your post. The order matters: fix what clients feel first, then build what compounds.</p>
+      </div>
+      <div>
+        <ol class="phases" id="phases">
+          <li class="phase">
+            <span class="pnum" aria-hidden="true">1</span>
+            <h3>Map what's really happening</h3>
+            <p>Walk through every enquiry, booking, form and email touchpoint. Note where information is typed twice, forgotten, or chased by hand.</p>
+            <p class="out"><b>You get:</b> a one-page map of your systems and a short priority list.</p>
+          </li>
+          <li class="phase">
+            <span class="pnum" aria-hidden="true">2</span>
+            <h3>Make every enquiry land</h3>
+            <p>Tighten Podium autoresponders and routing so each enquiry gets a fast, on-brand reply and a clear owner, including after hours.</p>
+            <p class="out"><b>You get:</b> tested enquiry flows and an SOP for each.</p>
+          </li>
+          <li class="phase">
+            <span class="pnum" aria-hidden="true">3</span>
+            <h3>Build nurture that runs itself</h3>
+            <p>Mailchimp welcome, aftercare and win-back sequences, built from reusable templates the team can update without me.</p>
+            <p class="out"><b>You get:</b> a template library and a map of every automation.</p>
+          </li>
+          <li class="phase">
+            <span class="pnum" aria-hidden="true">4</span>
+            <h3>Launch memberships and digital forms</h3>
+            <p>Set up the membership offering in Simple Salon, and move consultation and medical history forms online so they connect to client records.</p>
+            <p class="out"><b>You get:</b> memberships and forms that are live, tested and documented.</p>
+          </li>
+        </ol>
+        <p class="plan-close">Every phase ends the same way: tested before it goes live, written up as an SOP, and handed over so nothing lives only in my head.</p>
+      </div>
+    </div>
+  </section>
+
+  <section id="sop" aria-labelledby="sop-title">
+    <div class="sop-grid">
+      <div class="intro">
+        <h2 id="sop-title" class="marker">What an SOP from me looks like</h2>
+        <p>Short, specific and testable. This sample is written for the enquiry flow in my plan.</p>
+        <p>Try the checklist. Nothing goes live until every box is ticked.</p>
+      </div>
+      <article class="sop" aria-label="Sample SOP">
+        <div class="sop-top"><span class="kind">Sample SOP</span><span class="ver">Version 1.0</span></div>
+        <h3>New enquiry autoresponder</h3>
+        <dl>
+          <dt>Purpose</dt><dd>Every new enquiry gets an on-brand reply within minutes and a named owner.</dd>
+          <dt>Trigger</dt><dd>A new message arrives from someone who isn't a client yet.</dd>
+          <dt>Owner</dt><dd>Systems VA, reviewed monthly with the clinic manager.</dd>
+        </dl>
+        <h4>Steps</h4>
+        <ol>
+          <li>The auto-reply sends a greeting, the booking link and opening hours.</li>
+          <li>The enquiry is tagged with the treatment it mentions.</li>
+          <li>If there's no booking after 24 hours, front desk gets a follow-up task.</li>
+        </ol>
+        <h4>Before go-live</h4>
+        <ul class="checks" id="checks">
+          <li><button class="check" role="checkbox" aria-checked="false" type="button"><span class="box" aria-hidden="true"></span>Send a test enquiry from a personal number</button></li>
+          <li><button class="check" role="checkbox" aria-checked="false" type="button"><span class="box" aria-hidden="true"></span>Send one after hours and check the after-hours reply</button></li>
+          <li><button class="check" role="checkbox" aria-checked="false" type="button"><span class="box" aria-hidden="true"></span>Confirm the treatment tag is applied</button></li>
+          <li><button class="check" role="checkbox" aria-checked="false" type="button"><span class="box" aria-hidden="true"></span>Confirm the follow-up task appears after the delay</button></li>
+        </ul>
+        <div class="golive" id="golive" aria-live="polite"><span class="lamp" aria-hidden="true"></span><span id="golive-text">4 checks left before go-live</span></div>
+        <p class="rollback"><b>If something breaks:</b> switch the workflow off. Enquiries fall back to manual replies while it's fixed.</p>
+      </article>
+    </div>
+  </section>
+
+  <section id="approach" aria-labelledby="approach-title">
+    <div class="sec-head">
+      <h2 id="approach-title" class="marker">How I work</h2>
+      <p>Give me an idea and a direction. I'll research the options, ask the questions that matter, build it, and follow through.</p>
+    </div>
+    <div class="principles">
+      <div class="principle">
+        <h3>Test it before it touches a client</h3>
+        <p>I try to break every workflow in a safe environment first, including the odd cases like after-hours messages and duplicate contacts.</p>
+      </div>
+      <div class="principle">
+        <h3>Measure instead of assuming</h3>
+        <p>If a change is meant to save time or lift bookings, I check whether it did, and adjust when it didn't.</p>
+      </div>
+      <div class="principle">
+        <h3>Write it down once</h3>
+        <p>Every system I build ships with an SOP, so nobody has to rediscover how it works or depend on me to explain it.</p>
+      </div>
+      <div class="principle">
+        <h3>Own it until it works</h3>
+        <p>Once a project is agreed, I move it forward on my own and raise problems early, with a proposed fix attached.</p>
+      </div>
+    </div>
+  </section>
+
+  <section id="toolkit" aria-labelledby="toolkit-title">
+    <div class="sec-head">
+      <h2 id="toolkit-title" class="marker">Toolkit</h2>
+      <p>What I use day to day. The clinic platforms in your post are next on the list.</p>
+    </div>
+    <dl class="tools">
+      <div class="tool-row"><dt>Automation and integration</dt><dd>Lark (Feishu), n8n, REST APIs, webhooks</dd></div>
+      <div class="tool-row"><dt>Applications and data</dt><dd>Python, Odoo, PostgreSQL, SQL</dd></div>
+      <div class="tool-row"><dt>Testing and delivery</dt><dd>Automated testing, regression analysis, GitHub Actions, CI/CD</dd></div>
+      <div class="tool-row"><dt>Infrastructure</dt><dd>Docker, k3s, Kustomize, Harbor, Linux, systemd, nginx</dd></div>
+      <div class="tool-row"><dt>Documentation</dt><dd>SOPs, operational runbooks, architecture decision records</dd></div>
+      <div class="tool-row"><dt>Domain knowledge</dt><dd>Philippine HRIS, payroll and timekeeping</dd></div>
+    </dl>
+  </section>
+
+  <section class="contact" id="contact" aria-labelledby="contact-title">
+    <h2 id="contact-title" class="marker">Have a process that keeps eating hours?</h2>
+    <p class="sub">Send me the messiest one. I'll tell you how I'd fix it.</p>
+    <a class="mail" href="mailto:jomartalambayan97@gmail.com?subject=Systems%20%26%20Automation%20VA">jomartalambayan97@gmail.com</a>
+    <div class="contact-meta">
+      <a href="https://www.linkedin.com/in/jomar-talambayan-52730227a/" target="_blank" rel="noopener">LinkedIn profile</a>
+      <span>Based in the Philippines (UTC+8)</span>
+      <span>Available Tuesday to Saturday, within Australian business hours</span>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="wrap">
+    <span>Jomar Talambayan, systems and automation</span>
+    <span>2026</span>
+  </div>
+</footer>
+
+<script>
+(function(){
+  var reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var svg = document.getElementById('heroFlow');
+  if (reduce && svg && svg.pauseAnimations) {
+    try { svg.setCurrentTime(3.5); svg.pauseAnimations(); } catch (e) {}
+  }
+
+  var nav = document.querySelector('.nav');
+  var page = document.getElementById('page');
+  var spine = document.querySelector('.spine');
+  var runner = document.querySelector('.runner');
+  var markers = Array.prototype.slice.call(document.querySelectorAll('.marker'));
+  var phases = document.getElementById('phases');
+  var phaseItems = phases ? Array.prototype.slice.call(phases.querySelectorAll('.phase')) : [];
+  var ticking = false;
+
+  function clamp(v){ return Math.max(0, Math.min(1, v)); }
+
+  function update(){
+    ticking = false;
+    var vh = window.innerHeight;
+    if (nav) nav.classList.toggle('scrolled', window.scrollY > 8);
+
+    if (spine && runner && spine.offsetParent !== null) {
+      var sr = spine.getBoundingClientRect();
+      var y = Math.max(0, Math.min(sr.height - 16, vh * 0.42 - sr.top));
+      runner.style.setProperty('--s', y);
+      var runnerAbs = sr.top + y;
+      markers.forEach(function(m){
+        m.classList.toggle('reached', m.getBoundingClientRect().top <= runnerAbs + 4);
+      });
+    }
+
+    if (phases) {
+      var pr = phases.getBoundingClientRect();
+      var p = clamp((vh * 0.55 - pr.top) / pr.height);
+      phases.style.setProperty('--p', p);
+      var line = pr.top + p * pr.height;
+      phaseItems.forEach(function(li){
+        li.classList.toggle('lit', li.getBoundingClientRect().top + 20 <= line);
+      });
+    }
+  }
+  function onScroll(){ if (!ticking) { ticking = true; requestAnimationFrame(update); } }
+  window.addEventListener('scroll', onScroll, { passive: true });
+  window.addEventListener('resize', onScroll);
+  update();
+
+  var checks = Array.prototype.slice.call(document.querySelectorAll('.check'));
+  var golive = document.getElementById('golive');
+  var goliveText = document.getElementById('golive-text');
+  function refreshGoLive(){
+    var left = checks.filter(function(c){ return c.getAttribute('aria-checked') !== 'true'; }).length;
+    if (left === 0) {
+      golive.classList.add('ready');
+      goliveText.textContent = 'All checks passed. Ready to go live.';
+    } else {
+      golive.classList.remove('ready');
+      goliveText.textContent = left + (left === 1 ? ' check' : ' checks') + ' left before go-live';
+    }
+  }
+  checks.forEach(function(c){
+    c.addEventListener('click', function(){
+      c.setAttribute('aria-checked', c.getAttribute('aria-checked') === 'true' ? 'false' : 'true');
+      refreshGoLive();
+    });
+  });
+})();
+</script>
+</body>
+</html>
